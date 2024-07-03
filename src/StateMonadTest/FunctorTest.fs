@@ -6,7 +6,7 @@ open StateMonadTest.Tree
 
 let baseCase _ = 1
 let baseCase' v = Leaf(String.length v)
-let (^+) l r = Node (l, r)
+let (^+) l r = Node(l, r)
 
 // Tree a -> Int
 let rec numberOfLeaves =
@@ -14,12 +14,21 @@ let rec numberOfLeaves =
     | Leaf v -> baseCase v
     | Node(l, r) -> numberOfLeaves l + numberOfLeaves r
 
+let rec numberOfLeaves' =
+    function
+    | Leaf _ -> 1
+    | Node(l, r) -> numberOfLeaves' l + numberOfLeaves' r
 
 // Tree String -> Tree Int
 let rec lengths =
     function
     | Leaf v -> baseCase' v
     | Node(l, r) -> lengths l ^+ lengths r
+
+let rec lengths' =
+    function
+    | Leaf v -> Leaf(String.length v)
+    | Node(l, r) -> Node(lengths' l, lengths' r)
 
 // (a -> b) -> Tree a -> Tree b
 let rec map f tree =
@@ -77,6 +86,6 @@ let (^) = map
 
 [<Fact>]
 let ``calculate the leaves' content length, lifting a function`` () =
-    let treeOfLengths = String.length ^ treeOfWords
+    let treeOfLengths = String.length^ treeOfWords
 
     test <@ treeOfLengths = treeOfNumbers @>
