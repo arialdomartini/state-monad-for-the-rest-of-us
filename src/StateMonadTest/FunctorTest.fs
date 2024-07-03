@@ -1,24 +1,8 @@
-module StateMonadTest
+module StateMonadTest.FunctorTest
 
 open Xunit
 open Swensen.Unquote
-
-//     Node
-//     /  \
-//  Leaf  Leaf
-
-//     Node
-//     /  \
-//  Leaf  Node
-//        /  \
-//    Leaf   Leaf
-
-//       Leaf
-
-
-type Tree<'a> =
-    | Leaf of 'a
-    | Node of Tree<'a> * Tree<'a>
+open StateMonadTest.Tree
 
 let baseCase _ = 1
 let baseCase' v = Leaf(String.length v)
