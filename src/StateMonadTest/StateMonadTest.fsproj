@@ -11,6 +11,9 @@
     <ItemGroup>
         <Compile Include="Tree.fs"/>
         <Compile Include="FunctorTest.fs" />
+        <Compile Include="Memoization.fs" />
+        <Compile Include="ImpureIndex.fs" />
+        <Compile Include="ApplicativeAndMonadTest.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
