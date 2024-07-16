@@ -14,46 +14,58 @@ type WithCount<'v> = WithCount of (int -> 'v * int)
 
 
 let build l r = Node(l, r)
-let run (WithCount f) (count: int)= f count
- 
+let run (WithCount f) (count: int) = f count
+
 let add x y = x + y
 
-let (<|) f a = f a 
+let (<|) f a = f a
 let r = add <| 2 <| 3
 
-let pure'<'v> (v: 'v) : WithCount<'v> = WithCount (fun count -> (v, count))
+let pure'<'v> (v: 'v) : WithCount<'v> = WithCount(fun count -> (v, count))
 
-// WithCount (a -> b) -> WithCount a -> WithCount b 
-let (<*>) f a = 
-    WithCount (fun count ->
+// WithCount (a -> b) -> WithCount a -> WithCount b
+let (<*>) f a =
+    WithCount(fun count ->
         let fv, fc = run f count
         let av, ac = run a fc
         let b = fv av
         b, ac)
 
-let incCount = WithCount (fun c -> (), c + 1)
-let putCount c = WithCount (fun _ -> (), c)
-let getCount = WithCount (fun c -> c, c)
-//
-// let incCount =
-//     let f get put =
-//         let count = get
-//         let _ = put (count + 1)
-//         ()
-//     pure' f <*> getCount <*> putCount
+let (<*) f v =
+    WithCount(fun count ->
+        let fv, fc = run f count
+        let _, s' = run v fc
+        (fv, s'))
 
-let buildLeaf v count put =
-    let leaf = Leaf (v, count)
-    put (count + 1) |> ignore
-    leaf
+
+let incCount = WithCount(fun c -> ((), c + 1))
+let putCount c = WithCount(fun _ -> ((), c))
+let incNum c = c + 1
+let getCount = WithCount(fun c -> (c, c))
+
+let (>>=) v f =
+    WithCount(fun count ->
+        let vv, cv = run v count
+        let withCountB = f vv
+        run withCountB cv)
+
+let buildLeaf v count = Leaf(v, count)
+
+type KeepState() =
+    member this.Bind(v, f) = v >>= f
+    member this.Return(v) = pure' v
+
+let keepState = KeepState()
+
+let incrementCount: WithCount<unit> =
+    WithCount (fun count ->
+        (), count + 1)
 
 let rec index<'a> =
     function
     | Leaf v ->
-        // pure' buildLeaf <*> (pure' v) <*> getCount <*> (pure' putCount)
-        pure' buildLeaf <*> (pure' v) <*> getCount <*> pure' putCount
-    | Node(l, r) ->
-        pure' build <*> index l <*> index r
+        pure' buildLeaf <*> (pure' v) <*> getCount <* incrementCount
+    | Node(l, r) -> pure' build <*> index l <*> index r
 
 [<Fact>]
 let ``indexes a tree`` () =
