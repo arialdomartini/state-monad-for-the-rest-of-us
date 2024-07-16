@@ -14,7 +14,12 @@ type WithCount<'v> = WithCount of (int -> 'v * int)
 
 
 let buildNode l r = Node(l, r)
+
+// v -> Int -> Leaf (v, Int)
 let buildLeaf v count = Leaf(v, count)
+
+// v -> Int -> () -> Leaf (v, Int)
+let buildLeaf' v count _ = Leaf(v, count)
 
 let run (WithCount f) (count: int) = f count
 
@@ -36,8 +41,8 @@ let (<*>) f a =
 let (<*) f v =
     WithCount(fun count ->
         let fv, fc = run f count
-        let _, s' = run v fc
-        (fv, s'))
+        let _, newCount = run v fc
+        (fv, newCount))
 
 
 let incCount = WithCount(fun c -> ((), c + 1))
@@ -58,19 +63,28 @@ type KeepState() =
 
 let keepState = KeepState()
 
-let incrementCount: WithCount<unit> =
-    WithCount (fun count ->
-        (), count + 1)
+let incrementCount: WithCount<unit> = WithCount(fun count -> (), count + 1)
 
 let rec index<'a> =
     function
-    | Leaf v ->
-        pure' buildLeaf <*> (pure' v) <*> getCount <* incrementCount
+    | Leaf v -> pure' buildLeaf <*> pure' v <*> getCount <* incrementCount
+    | Node(l, r) -> pure' buildNode <*> index l <*> index r
+
+let rec index'<'a> =
+    function
+    | Leaf v -> pure' buildLeaf' <*> pure' v <*> getCount <*> incrementCount
     | Node(l, r) -> pure' buildNode <*> index l <*> index r
 
 [<Fact>]
 let ``indexes a tree`` () =
     let withCount = index tree
+    let indexed, _ = run withCount 1
+
+    test <@ indexed = Node(Leaf("one", 1), Node(Leaf("two", 2), Leaf("three", 3))) @>
+
+[<Fact>]
+let ``indexes a tree using buildLeaf with extra parameter`` () =
+    let withCount = index' tree
     let indexed, _ = run withCount 1
 
     test <@ indexed = Node(Leaf("one", 1), Node(Leaf("two", 2), Leaf("three", 3))) @>
