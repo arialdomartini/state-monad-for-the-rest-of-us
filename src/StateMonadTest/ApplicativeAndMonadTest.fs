@@ -13,7 +13,9 @@ type WithCount<'v> = WithCount of (int -> 'v * int)
 //type WithCount<'f> = WithCount of 'f
 
 
-let build l r = Node(l, r)
+let buildNode l r = Node(l, r)
+let buildLeaf v count = Leaf(v, count)
+
 let run (WithCount f) (count: int) = f count
 
 let add x y = x + y
@@ -49,7 +51,6 @@ let (>>=) v f =
         let withCountB = f vv
         run withCountB cv)
 
-let buildLeaf v count = Leaf(v, count)
 
 type KeepState() =
     member this.Bind(v, f) = v >>= f
@@ -65,7 +66,7 @@ let rec index<'a> =
     function
     | Leaf v ->
         pure' buildLeaf <*> (pure' v) <*> getCount <* incrementCount
-    | Node(l, r) -> pure' build <*> index l <*> index r
+    | Node(l, r) -> pure' buildNode <*> index l <*> index r
 
 [<Fact>]
 let ``indexes a tree`` () =
