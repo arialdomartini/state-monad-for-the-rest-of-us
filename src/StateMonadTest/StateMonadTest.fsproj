@@ -14,7 +14,8 @@
         <Compile Include="Memoization.fs" />
         <Compile Include="ImpureIndex.fs" />
         <Compile Include="PurelyIndexing.fs" />
-        <Compile Include="ApplicativeAndMonadTest.fs" />
+        <Compile Include="ApplicativeTest.fs" />
+        <Compile Include="MonadTest.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
