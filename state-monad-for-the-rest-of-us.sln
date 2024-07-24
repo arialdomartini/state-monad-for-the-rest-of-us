@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9EBD7247-572
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StateMonadTest", "src\StateMonadTest\StateMonadTest.fsproj", "{E8003922-FE06-463D-9770-3AB0032C0885}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateMonadCSharp", "src\StateMonadCSharp\StateMonadCSharp.csproj", "{97A5D385-07D5-4199-A865-EF732B77DB0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{E8003922-FE06-463D-9770-3AB0032C0885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8003922-FE06-463D-9770-3AB0032C0885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8003922-FE06-463D-9770-3AB0032C0885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97A5D385-07D5-4199-A865-EF732B77DB0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97A5D385-07D5-4199-A865-EF732B77DB0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97A5D385-07D5-4199-A865-EF732B77DB0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97A5D385-07D5-4199-A865-EF732B77DB0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E8003922-FE06-463D-9770-3AB0032C0885} = {9EBD7247-5727-4DF5-A086-B2109B859044}
+		{97A5D385-07D5-4199-A865-EF732B77DB0B} = {9EBD7247-5727-4DF5-A086-B2109B859044}
 	EndGlobalSection
 EndGlobal
