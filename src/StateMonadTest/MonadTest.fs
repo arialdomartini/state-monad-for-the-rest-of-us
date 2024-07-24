@@ -21,28 +21,45 @@ let buildLeaf' v count _ = Leaf(v, count)
 let run (WithCount f) (count: int) = f count
 
 // v -> WithCount v
-let pure'<'v> v = WithCount(fun count -> (v, count))
+let pure' v = WithCount(fun count -> (v, count))
 
+// WithCount (Int, Int)
 let getCount = WithCount(fun c -> (c, c))
+
+// Int -> WithCount ((), Int)
 let putCount c = WithCount(fun _ -> ((), c))
 
-let (>>=) v f =
-    WithCount(fun count ->
-        let vv, cv = run v count
-        let withCountB = f vv
-        run withCountB cv)
+// (a -> WithCount b) -> WithCount a -> WithCount b
+// let (=<<) f a  =
+//     WithCount(fun count ->
+//         let va, ca = run a count
+//         let result = f va
+//         run result ca)
 
-let rec index<'a> =
+// WithCount a -> (a -> WithCount b) -> WithCount b
+let (>>=) a f =
+    WithCount(fun count ->
+        let va, ca = run a count
+        let result = f va
+        run result ca)
+
+// (a -> WithCount b) -> WithCount a -> WithCount b
+let (=<<) a b = b (>>=) a
+
+let rec index =
     function
-    | Leaf v ->
-        getCount >>=
-            (fun count ->
-                let leaf = Leaf (v, count)
-                (putCount (count + 1) >>=
-                    (fun _ -> pure' leaf)))           
-              
+    | Leaf(v: string) ->
+        getCount
+        >>= (fun count ->
+            let leaf = Leaf(v, count)
+            putCount (count + 1)
+            >>= (fun _ -> pure' leaf))
     | Node(l, r) ->
-        index l >>= (fun ll -> (index r >>= (fun rr -> pure' (buildNode ll rr))))
+        index l >>= (fun ll ->
+            index r
+             >>= (fun rr ->
+                 pure' (buildNode ll rr)))
+
 
 [<Fact>]
 let ``indexes a tree`` () =
