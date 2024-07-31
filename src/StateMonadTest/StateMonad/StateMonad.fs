@@ -19,10 +19,9 @@ let (=<<) a b = b (>>=) a
 
 let (>>) a b = a >>= (fun _ -> b)
     
-
-
 type StateExpression() =
     member this.Return(v) = pure' v 
     member this.Bind(v, f) = v >>= f
+    member _.ReturnFrom(m: State<'s, 'a>) = m  // New ReturnFrom method
     
 let state = StateExpression()

@@ -20,6 +20,7 @@
         <Compile Include="StateMonad\StateMonad.fs" />
         <Compile Include="StateMonad\IndexingTreeTest.fs" />
         <Compile Include="StateMonad\StackTest.fs" />
+        <Compile Include="StateMonad\RandomTest.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
