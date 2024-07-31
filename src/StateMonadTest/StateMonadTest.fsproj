@@ -16,6 +16,8 @@
         <Compile Include="PurelyIndexing.fs" />
         <Compile Include="ApplicativeTest.fs" />
         <Compile Include="MonadTest.fs" />
+        <Compile Include="StateMonad\StateMonad.fs" />
+        <Compile Include="StateMonad\IndexingTreeTest.fs" />
         <Compile Include="ComputationExpression.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>

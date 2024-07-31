@@ -9,10 +9,9 @@ internal struct Unit
 
 internal record WithCount<T>(Func<int, (T, int)> F);
 
-public static class WithCountExtensions
+internal static class WithCountExtensions
 {
     internal static WithCount<T> Pure<T>(T value) => new(count => (value, count));
-
 
     internal static (T, int) Run<T>(WithCount<T> value, int count) => value.F(count);
 
