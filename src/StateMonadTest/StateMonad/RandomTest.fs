@@ -4,7 +4,6 @@ open StateMonadTest.StateMonad.StateMonad
 open Xunit
 open Swensen.Unquote
 
-
 module LinearCongruentialGenerator =
     type LCGState = int64
 

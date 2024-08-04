@@ -21,6 +21,7 @@
         <Compile Include="StateMonad\IndexingTreeTest.fs" />
         <Compile Include="StateMonad\StackTest.fs" />
         <Compile Include="StateMonad\RandomTest.fs" />
+        <Compile Include="StateMonad\TicTacToeTest.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
